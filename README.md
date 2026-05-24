@@ -1,18 +1,23 @@
 # Web Scraper & Data Pipeline (n8n + JavaScript + Google Sheets)
 
-## 📌 Описание проекта
-Автоматизированный сценарий (Workflow) для парсинга и структурирования данных с сайта Hacker News. Скрипт имитирует работу браузера, извлекает актуальные заголовки и ссылки, очищает их от шума и автоматически экспортирует в тестовую базу данных (Google Sheets).
+## 📌 Project Overview
+An automated workflow designed to scrape, clean, and structure data from the Hacker News homepage. The script simulates browser behavior to fetch raw HTML, extracts specific article titles and URLs using CSS selectors, processes the data via JavaScript, and automatically exports the structured entries into a test database (Google Sheets).
 
-## 🛠️ Технологический стек
-- **Платформа автоматизации:** n8n
-- **Протоколы:** HTTP (GET-запросы)
-- **Парсинг:** DOM, точечные CSS-селекторы (`span.titleline > a`)
-- **Обработка данных:** JavaScript (Node.js / методы массивов для слияния JSON объектов)
-- **Интеграция:** Google Sheets API (OAuth2)
+## 🛠️ Tech Stack
+- **Automation Platform:** n8n
+- **Protocols:** HTTP (GET requests)
+- **Parsing Techniques:** DOM Parsing, precise CSS selectors (`span.titleline > a`)
+- **Data Manipulation:** JavaScript (Node.js / array mapping for merging JSON objects)
+- **Integration:** Google Sheets API (OAuth2)
 
-## 🔍 Логика работы пайплайна
-1. **HTTP Request:** Выполнение GET-запроса к Hacker News для получения сырого HTML-кода страницы.
-2. **HTML Extract:** Фильтрация кода с помощью CSS-селекторов. Разделение потока на массивы чистых заголовков и ссылок.
-3. **Code (JS):** Нормализация структуры данных. Слияние изолированных массивов в единый JSON-массив объектов по индексам.
-4. **Google Sheets:** Автоматический маппинг по колонкам и дозапись (Append) структурированных строк в таблицу.
+## 🔍 Workflow Architecture & Pipeline Logic
+1. **HTTP Request:** Executes a GET request to Hacker News to download the raw HTML source code of the main page.
+2. **HTML Extract:** Filters the code using specific CSS selectors. It splits the data flow into two clean, separate arrays: one for article titles and another for URLs.
+3. **Code Node (JS):** Normalizes the data structure. It executes a JavaScript map function to merge the isolated arrays into unified JSON objects based on their index pairs.
+4. **Google Sheets:** Automatically maps the formatted JSON properties to the corresponding columns (`title` and `link`) and appends them as structured rows into the spreadsheet.
+
+## 🎯 QA & Testing Application
+In real-world QA engineering, this automated pipeline is highly valuable for:
+- **Data-Driven Testing (DDT):** Quickly gathering and populating QA/test environments with real, dynamic data.
+- **Regression Content Monitoring:** Automating checks to ensure that production links are active, properly formatted, and return correct status codes.
 <img width="953" height="518" alt="image" src="https://github.com/user-attachments/assets/83876a8a-2b98-4d22-ab65-5cd8b3052575" />
