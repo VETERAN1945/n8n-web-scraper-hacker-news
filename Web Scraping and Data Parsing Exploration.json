@@ -1,0 +1,199 @@
+{
+  "name": "Web Scraping and Data Parsing Exploration",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "bf902b32-a3c5-4ea3-b0b3-6118495dadd2",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://news.ycombinator.com/",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e976cdcb-ceb2-4e7e-ac74-d0bd5637e5ee",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "title",
+              "cssSelector": "span.titleline > a",
+              "returnArray": true
+            },
+            {
+              "key": "link",
+              "cssSelector": "span.titleline > a",
+              "returnValue": "attribute",
+              "attribute": "href",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "66933d61-4f0c-4b27-8c99-0e2c47592520",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Забираем наши массивы заголовков и ссылок из предыдущего узла HTML\nconst titles = $('HTML').item.json.title;\nconst links = $('HTML').item.json.link;\n\n// Склеиваем их по индексу в формат { title: \"...\", link: \"...\" }\nreturn titles.map((title, index) => {\n  return {\n    json: {\n      title: title,\n      link: links[index]\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "fd7086fd-e321-485b-8a68-362588731962",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1LKD-XBFpr48CqCsHlLfMoycT3GW6OS33g3MYgeMvu-I",
+          "mode": "list",
+          "cachedResultName": "Hacker News Parser Output",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LKD-XBFpr48CqCsHlLfMoycT3GW6OS33g3MYgeMvu-I/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лист1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LKD-XBFpr48CqCsHlLfMoycT3GW6OS33g3MYgeMvu-I/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "link",
+              "displayName": "link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        832,
+        0
+      ],
+      "id": "12cd319c-e84c-4cf3-b866-56f5f94ae871",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "MAWh5pMaz3eedzKO",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "4a4fb07a-4394-4f89-8557-0ba48ed3fbdd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6c749500e158d6044d7a961540113c154c72bb8921343a9c1d8fc8259111460b"
+  },
+  "id": "HQjnY03InMXBKKwU",
+  "tags": []
+}
